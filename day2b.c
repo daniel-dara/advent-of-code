@@ -1,3 +1,7 @@
+/*
+ * Hardly different from first problem. Just can't rely on absolute dimensional bounds anymore so must use padding instead.
+ */
+
 #include <stdio.h>
 
 #define SIZE 5

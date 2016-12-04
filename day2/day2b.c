@@ -7,7 +7,7 @@
 #define SIZE 5
 
 int main() {
-	FILE* input = fopen("day2.in", "r");
+	FILE* input = fopen("input.txt", "r");
 
 	char c;
 
@@ -42,6 +42,8 @@ int main() {
 	num[index++] = numpad[col][row];
 
 	printf("%s\n", num);
+
+	fclose(input);
 
 	return 0;
 }

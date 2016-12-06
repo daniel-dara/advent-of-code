@@ -4,7 +4,7 @@ from collections import Counter
 counters = [Counter() for _ in range(8)]
 
 for word in open('input.txt').readlines():
-	for i in range(0, 8):
+	for i in range(8):
 		counters[i][word[i]] += 1
 
 answer = ''

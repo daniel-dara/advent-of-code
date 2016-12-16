@@ -26,7 +26,7 @@ def isValidState(floor):
 
 	return not (hasGen and unpaired)
 
-start = [[-1, 1], [-2, -3, -4, -5], [2, 3, 4, 5], []]
+start    = [[-1, 1], [-2, -3, -4, -5], [2, 3, 4, 5], []]
 end_hash = getHash(3, [[], [], [], sum(start, [])])
 states   = {}
 queue    = []

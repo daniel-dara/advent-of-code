@@ -22,15 +22,15 @@ while 'a' not in values:
 				values[wires[1]] = (~values[wires[0]]) & 2**16 - 1
 			elif cmd == 'AND':
 				if nums:
-					values[wires[1]] = (nums[0] & values[wires[0]]) & 2**16 - 1
+					values[wires[1]] = (nums[0] & values[wires[0]])
 				else:
-					values[wires[2]] = (values[wires[0]] & values[wires[1]]) & 2**16 - 1
+					values[wires[2]] = (values[wires[0]] & values[wires[1]])
 			elif cmd == 'OR':
-				values[wires[2]] = (values[wires[0]] | values[wires[1]]) & 2**16 - 1
+				values[wires[2]] = (values[wires[0]] | values[wires[1]])
 			elif cmd == 'LSHIFT':
 				values[wires[1]] = (values[wires[0]] << nums[0]) & 2**16 - 1
 			elif cmd == 'RSHIFT':
-				values[wires[1]] = (values[wires[0]] >> nums[0]) & 2**16 - 1
+				values[wires[1]] = (values[wires[0]] >> nums[0])
 			else:
 				values[wires[1]] = values[wires[0]]
 

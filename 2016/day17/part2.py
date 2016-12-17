@@ -6,7 +6,7 @@ def unlock(path):
 def findLongestPath(queue):
 	longest_path = ''
 
-	while len(queue) > 0:
+	while queue:
 		x, y, path = queue.pop(0)
 
 		if (x, y) == (3, 3):

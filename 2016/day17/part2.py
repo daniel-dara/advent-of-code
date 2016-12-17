@@ -1,33 +1,34 @@
 from hashlib import md5
 
-queue = [(0, 0, '')]
-pathes = []
-
 def unlock(path):
 	return [not c.isdigit() and c != 'a' for c in md5(bytes('pxxbnzuo' + path, 'ascii')).hexdigest()[:4]]
 
-while len(queue) > 0:
-	x, y, path = queue.pop(0)
+def findLongestPath(queue):
+	longest_path = ''
 
-	if (x, y) == (3, 3):
-		pathes.append(path)
-		continue
+	while len(queue) > 0:
+		x, y, path = queue.pop(0)
 
-	if x < 0 or y < 0 or x >= 4 or y >= 4:
-		continue
+		if (x, y) == (3, 3):
+			longest_path = max(longest_path, path, key=len)
+		else:
+			if x < 0 or y < 0 or x >= 4 or y >= 4:
+				continue
 
-	unlocked = unlock(path)
+			unlocked = unlock(path)
 
-	if unlocked[0]:
-		queue.append((x, y - 1, path + 'U'))
+			if unlocked[0]:
+				queue.append((x, y - 1, path + 'U'))
 
-	if unlocked[1]:
-		queue.append((x, y + 1, path + 'D'))
+			if unlocked[1]:
+				queue.append((x, y + 1, path + 'D'))
 
-	if unlocked[2]:
-		queue.append((x - 1, y, path + 'L'))
+			if unlocked[2]:
+				queue.append((x - 1, y, path + 'L'))
 
-	if unlocked[3]:
-		queue.append((x + 1, y, path + 'R'))
+			if unlocked[3]:
+				queue.append((x + 1, y, path + 'R'))
 
-print('solution:', len(max(pathes, key=lambda p: len(p))))
+	return longest_path
+
+print(len(findLongestPath([(0, 0, '')])))

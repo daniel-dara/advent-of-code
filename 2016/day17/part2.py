@@ -10,7 +10,7 @@ def findLongestPath(queue):
 		x, y, path = queue.pop(0)
 
 		if (x, y) == (3, 3):
-			longest_path = max(longest_path, path, key=len)
+			longest_path = path
 		else:
 			if x < 0 or y < 0 or x >= 4 or y >= 4:
 				continue

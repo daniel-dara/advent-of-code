@@ -1,33 +1,30 @@
 from hashlib import md5
 
-queue = [(0, 0, '')]
-pathes = []
-
 def unlock(path):
 	return [not c.isdigit() and c != 'a' for c in md5(bytes('pxxbnzuo' + path, 'ascii')).hexdigest()[:4]]
 
-while len(queue) > 0:
-	x, y, path = queue.pop(0)
+def findShortestPath(queue):
+	while len(queue) > 0:
+		x, y, path = queue.pop(0)
 
-	if (x, y) == (3, 3):
-		pathes.append(path)
-		continue
+		if (x, y) == (3, 3):
+			return path
 
-	if x < 0 or y < 0 or x >= 4 or y >= 4:
-		continue
+		if x < 0 or y < 0 or x >= 4 or y >= 4:
+			continue
 
-	unlocked = unlock(path)
+		unlocked = unlock(path)
 
-	if unlocked[0]:
-		queue.append((x, y - 1, path + 'U'))
+		if unlocked[0]:
+			queue.append((x, y - 1, path + 'U'))
 
-	if unlocked[1]:
-		queue.append((x, y + 1, path + 'D'))
+		if unlocked[1]:
+			queue.append((x, y + 1, path + 'D'))
 
-	if unlocked[2]:
-		queue.append((x - 1, y, path + 'L'))
+		if unlocked[2]:
+			queue.append((x - 1, y, path + 'L'))
 
-	if unlocked[3]:
-		queue.append((x + 1, y, path + 'R'))
+		if unlocked[3]:
+			queue.append((x + 1, y, path + 'R'))
 
-print('solution:', min(pathes, key=lambda p: len(p)))
+print(findShortestPath([(0, 0, '')]))

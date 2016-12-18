@@ -17,7 +17,7 @@ for _ in range(39):
 	for i in range(len(row)):
 		# The trap rules laid out in the problem statement can actually be reduced down to just this one logic statement.
 		# First, note that (i > 0 and row[i - 1]) is checking if the left tile is a trap and (i < len(row) - 1 and row[i + 1])
-		# is checking the right. Checkout the following table to see why the center doesn't need to be checked.
+		# is checking the right. The following table shows why the center doesn't need to be checked.
 		#
 		# TRAP CRITERIA TABLE
 		# (L C R)

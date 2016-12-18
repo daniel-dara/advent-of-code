@@ -28,7 +28,7 @@ def isValidState(floor):
 
 start    = [[-1, 1, -6, 6, -7, 7], [-2, -3, -4, -5], [2, 3, 4, 5], []]
 end_hash = getHash(3, [[], [], [], sum(start, [])])
-states   = {}
+states   = set()
 queue    = []
 
 queue.append([0, start, 0, getHash(0, start)])
@@ -37,7 +37,7 @@ while True:
 	elevator, floors, moves, cur_hash = queue.pop(0)
 
 	if cur_hash not in states:
-		states[cur_hash] = True
+		states.add(cur_hash)
 
 		if cur_hash == end_hash:
 			print("moves:", moves)

@@ -1,64 +1,40 @@
 import re
 
-# word = list('fbgdceah')
-word = list('decab')
+word = list('fbgdceah')
 
 def rotate(direction, amount):
-	for i in range(amount):
-		if direction > 0:
-			word.insert(0, word.pop(len(word) - 1))
-		else:
-			word.insert(len(word) - 1, word.pop(0))
-lines = []
-for line in open('sample.txt'):
-	lines.append(line.rstrip('\n'))
+	index = -direction * amount % len(word)
+	return word[index:] + word[:index]
 
-for line in lines[::-1]:
-	a, b, *t = list(map(int, re.findall(r'\d+', line))) + [None, None, None]
-	x, y, *t = re.findall(r'\b\w\b', line) + [None, None, None]
+for line in reversed(list(open('input.txt'))):
+	int1,  int2,  *trash = list(map(int, re.findall(r'\d+', line))) + [None, None]
+	char1, char2, *trash = re.findall(r'\b\w\b', line) + [None]
 
 	if line.startswith('swap position'):
-		temp = word[a]
-		word[a] = word[b]
-		word[b] = temp
+		word[int1], word[int2] = word[int2], word[int1]
 
 	elif line.startswith('swap letter'):
 		real_word = ''.join(word)
-		word = list(real_word.replace(x, '#').replace(y, x).replace('#', y))
+		word = list(real_word.replace(char1, '#').replace(char2, char1).replace('#', char2))
 
 	elif line.startswith('rotate'):
 		if 'left' in line:
-			rotate(1, a)
+			word = rotate(1, int1)
 		elif 'right' in line:
-			rotate(-1, a)
+			word = rotate(-1, int1)
 		else:
-			index = word.index(x) - 1
-			rotate(-1, (len(word) - index  + 1))
-			print('new index', word.index(x))
-			if word.index(x) > 4:
-				printf('hit 4')
-				rotate(-1, 1)
+			index = word.index(char1)
+			
+			if index == 0:
+				word = rotate(-1, 1)
+			elif index % 2:
+				word = rotate(-1, 1 + index // 2)
+			else:
+				word = rotate(-1, 5 + index // 2)
 
 	elif line.startswith('reverse positions'):
-		new_word = []
+		word = word[:int1] + word[int1:int2 + 1][::-1] + word[int2 + 1:]
+	elif line.startswith('move'):
+		word.insert(int1, word.pop(int2))
 
-		if a > 0:
-			new_word += word[:a]
-
-		new_word += word[a:b + 1][::-1]
-
-		if b < len(word) - 1:
-			new_word += word[b + 1:]
-
-		word = new_word
-	else:
-		if b < a:
-			a += 1
-
-		letter = word[b]
-		word.pop(b)
-		word.insert(a, letter)
-
-	print(line)
-	print('wtf', ''.join(word))
-	print()
+print(''.join(word))

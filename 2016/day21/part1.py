@@ -1,58 +1,34 @@
 import re
 
-word = list('cadfgbeh')
-# word = list('abcde')
+word = list('abcdefgh')
 
 def rotate(direction, amount):
-	for i in range(amount):
-		if direction > 0:
-			word.insert(0, word.pop(len(word) - 1))
-		else:
-			word.insert(len(word) - 1, word.pop(0))
+	index = -direction * amount % len(word)
+	return word[index:] + word[:index]
 
 for line in open('input.txt'):
-	a, b, *t = list(map(int, re.findall(r'\d+', line))) + [None, None, None]
-	x, y, *t = re.findall(r'\b\w\b', line) + [None, None, None]
+	int1,  int2,  *trash = list(map(int, re.findall(r'\d+', line))) + [None, None]
+	char1, char2, *trash = re.findall(r'\b\w\b', line) + [None]
 
 	if line.startswith('swap position'):
-		temp = word[a]
-		word[a] = word[b]
-		word[b] = temp
+		word[int1], word[int2] = word[int2], word[int1]
 
 	elif line.startswith('swap letter'):
 		real_word = ''.join(word)
-		word = list(real_word.replace(x, '#').replace(y, x).replace('#', y))
+		word = list(real_word.replace(char1, '#').replace(char2, char1).replace('#', char2))
 
 	elif line.startswith('rotate'):
 		if 'left' in line:
-			rotate(-1, a)
+			word = rotate(-1, int1)
 		elif 'right' in line:
-			rotate(1, a)
+			word = rotate(1, int1)
 		else:
-			index = word.index(x)
-			print(index, x)
-			rotate(1, index + 1 + (index >= 4))
+			index = word.index(char1)
+			word = rotate(1, index + 1 + (index >= 4))
 
 	elif line.startswith('reverse positions'):
-		new_word = []
-
-		if a > 0:
-			new_word += word[:a]
-
-
-		new_word += word[a:b + 1][::-1]
-
-		if b < len(word) - 1:
-			new_word += word[b + 1:]
-
-		word = new_word
-	else:
-		letter = word[a]
-		word.pop(a)
-		word.insert(b, letter)
-
-	print(line)
-	print(''.join(word))
-
+		word = word[:int1] + word[int1:int2 + 1][::-1] + word[int2 + 1:]
+	elif line.startswith('move'):
+		word.insert(int2, word.pop(int1))
 
 print(''.join(word))

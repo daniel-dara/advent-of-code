@@ -1,4 +1,3 @@
-
 instructions = open('input.txt').readlines()
 
 def validSignal(initialA):
@@ -7,8 +6,8 @@ def validSignal(initialA):
 	states = set()
 	expectedSignal = 0
 
-	while index < len(instructions) and str((registers, index, expectedSignal)) not in states:
-		states.add(str((registers, index, expectedSignal)))
+	while index < len(instructions) and str((registers, index)) not in states:
+		states.add(str((registers, index)))
 
 		parts = instructions[index].rstrip('\n').split(' ')
 		cmd, arg1, arg2, *rest = parts + [None]

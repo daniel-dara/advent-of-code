@@ -1,23 +1,19 @@
-num = int(open('input.txt').read())
-
-spiral = {(0, 0): 1}
-pos = (0, 0)
+x, y = (0, 0)
+spiral = {(x, y): 1}
 
 def getValue(x, y):
 	return spiral[(x, y)] if (x, y) in spiral else 0
 
-while spiral[pos] < num:
-	x, y = pos
-
+while spiral[x, y] < int(open('input.txt').read()):
 	if x == y:
 		if x > 0:
 			x -= 1 # upper right corner
-		elif x <= 0:
+		else:
 			x += 1 # lower left corner
 	elif -x == y:
 		if y > 0:
 			y -= 1 # upper left corner
-		elif y < 0:
+		else:
 			x += 1 # bottom right corner
 	else:
 		if abs(x) < abs(y):
@@ -31,12 +27,15 @@ while spiral[pos] < num:
 			else:
 				y -= 1 # left side
 
-	pos = (x, y)
-	spiral[pos] = (
-		getValue(x - 1, y) + getValue(x + 1, y) +         # left/right
-		getValue(x, y + 1) + getValue(x, y - 1) +         # up/down
-		getValue(x - 1, y - 1) + getValue(x - 1, y + 1) + # diag 
-		getValue(x + 1, y - 1) + getValue(x + 1, y + 1)   # diag
-	)
+	spiral[x, y] = sum([getValue(x, y) for x, y in (
+		(x - 1, y),
+		(x + 1, y),
+		(x, y + 1),
+		(x, y - 1),
+		(x - 1, y - 1),
+		(x - 1, y + 1),
+		(x + 1, y - 1),
+		(x + 1, y + 1),
+	)])
 
-print(spiral[pos])
+print(spiral[x, y])

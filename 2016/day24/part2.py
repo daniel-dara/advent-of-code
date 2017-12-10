@@ -42,6 +42,7 @@ distances = {}
 
 for location in locations:
 	distances[start, location] = getShortestPath(start, location)
+	distances[location, start] = distances[start, location]
 
 for pointA, pointB in itertools.combinations(locations, 2):
 	length = getShortestPath(pointA, pointB)
@@ -51,7 +52,7 @@ for pointA, pointB in itertools.combinations(locations, 2):
 
 leastSteps = float('inf')
 for path in itertools.permutations(locations, len(locations)):
-	path = (start,) + path
+	path = (start,) + path + (start,)
 	steps = 0
 
 	for i in range(len(path) - 1):

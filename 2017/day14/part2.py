@@ -1,7 +1,11 @@
 from functools import reduce
+from binascii import unhexlify
 
 def rotateLeft(l, n):
 	return l[n:] + l[:n]
+
+def hexToBitString(hexString):
+	return ''.join(['{0:08b}'.format(bytearray(unhexlify(hexString))[i]) for i in range(len(hexString) // 2)])
 
 def getKnotHash(input):
 	nums = [i for i in range(256)]
@@ -24,4 +28,25 @@ def getKnotHash(input):
 
 	return ''.join(map("{0:02x}".format, denseHash))
 
-print(getKnotHash(open('input.txt').read().rstrip('\n')))
+grid = set()
+
+for row in range(128):
+	for col, val in enumerate(hexToBitString(getKnotHash('ljoxqyyw-' + str(row)))):
+		if val == '1':
+			grid.add((row, col))
+
+def removeRegion(x, y):
+	if (x, y) in grid:
+		grid.remove((x, y))
+		removeRegion(x - 1, y)
+		removeRegion(x + 1, y)
+		removeRegion(x, y - 1)
+		removeRegion(x, y + 1)
+
+regionCount = 0
+
+while grid:
+	removeRegion(*next(iter(grid)))
+	regionCount += 1
+
+print(regionCount)

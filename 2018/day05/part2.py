@@ -1,6 +1,7 @@
 import re
 import string
 
+# requires Python3.6
 # runtime: 6s
 
 polymer = open('input.txt').read()

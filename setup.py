@@ -1,25 +1,36 @@
 #! /usr/bin/python
 import sys
 import os
+import datetime
 
 def createDirectory(directory):
 	if not os.path.exists(directory):
 		os.makedirs(directory)
+		print('Created folder: ./' + directory)
 
 def normalizeDay(day):
 	return day if len(day) == 2 else '0' + day
 
-day = normalizeDay(sys.argv[1])
-year = '2017'
+if len(sys.argv) == 1:
+	print('Usage: setup.py [year=current] <day>')
+	exit()
+elif len(sys.argv) == 2:
+	year = str(datetime.datetime.now().year)
+	day = normalizeDay(sys.argv[1])
+else:
+	year = sys.argv[1]
+	day = normalizeDay(sys.argv[2])
 
 createDirectory(year)
 
-path = year + '/day' + day
-createDirectory(path)
+dayPath = year + '/day' + day
+createDirectory(dayPath)
 
-open(path + '/part1.py', 'w').close()
-open(path + '/part2.py', 'w').close()
-open(path + '/input.txt', 'w').close()
-open(path + '/sample.txt', 'w').close()
+for file in ['part1.py', 'part2.py', 'input.txt', 'sample.txt']:
+	fullFilePath = dayPath + '/' + file
+	
+	if not os.path.exists(fullFilePath):
+		open(fullFilePath, 'w').close()
+		print('Created file: ' + fullFilePath)
 
-print("Created files in: ", path)
+print('done')

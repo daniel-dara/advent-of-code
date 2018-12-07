@@ -31,7 +31,7 @@ def finishWorker(i):
 	for step, dependencies in requirements.items():
 		if completedStep in dependencies:
 			# Fulfill the requirement.
-			requirements[step].remove(completedStep)
+			dependencies.remove(completedStep)
 
 			# Mark the step as ready if all requirements fulfilled.
 			if dependencies == []:

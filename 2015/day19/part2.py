@@ -2,11 +2,11 @@ from collections import defaultdict
 
 rules = defaultdict(lambda: [])
 revRules = {}
-molecule = open('input.txt').readlines()[-1]
+molecule = open('input/problem.txt').readlines()[-1]
 possibilities = set()
 maxLength = 0
 
-for line in open('input.txt'):
+for line in open('input/problem.txt'):
 	if line == '\n':
 		break
 

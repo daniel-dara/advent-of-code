@@ -12,8 +12,8 @@ class Position(NamedTuple):
 
 def path_generator(position: Position, delta: Position) -> Optional[str]:
     while position in diagram:
-        if diagram[position].isalpha():
-            yield diagram[position]
+        # if diagram[position].isalpha():
+        yield diagram[position]
 
         if diagram[position] == '+':
             for new_delta in DELTAS:
@@ -33,4 +33,6 @@ diagram: Dict[Position, str] = {
     if character != ' '
 }
 
-print(''.join(path_generator(min(diagram.keys()), Position(1, 0))))
+path = ''.join(path_generator(min(diagram.keys()), Position(1, 0)))
+print('part 1:', ''.join(character for character in path if character.isalpha()))
+print('part 2:', len(path))

@@ -46,7 +46,7 @@ def findShortestPath():
 			continue
 
 		# Try to unlock doors for the given path.
-		# KEY POINT: Doors do not stay unlocked. The problem statement doesn't make this clear but the sample solution does.
+		# KEY POINT: Doors do not stay unlocked. The problem statement doesn't make this clear but the example solution does.
 		# Because doors don't stay locked, the problem is somewhat easier as the door states don't have to be tracked.
 		# Simply try all doors again each move.
 		unlocked = unlock(path)

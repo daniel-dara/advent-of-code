@@ -42,7 +42,7 @@ int sign(int i) {
 }
 
 int main() {
-	// Sample input
+	// Example input
 	//const char* directions = "R8, R4, R4, R8"
 
 	// Problem input

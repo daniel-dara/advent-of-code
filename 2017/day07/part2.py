@@ -32,7 +32,8 @@ def checkBalance(nodeId):
 
 	for childId in node.children:
 		if nodes[childId].totalWeight is None:
-			checkBalance(childId)
+			if checkBalance(childId):
+				return True
 
 		childWeights.append(nodes[childId].totalWeight)
 
@@ -45,8 +46,9 @@ def checkBalance(nodeId):
 		difference = wrongWeight - rightWeight
 
 		print(nodes[node.children[childWeights.index(wrongWeight)]].weight - difference)
-		exit()
+		return True
 
 	node.totalWeight = node.weight + sum(childWeights)
+	return False
 
 checkBalance(root)

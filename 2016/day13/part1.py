@@ -12,8 +12,8 @@ while len(queue) > 0:
 	x, y, moves = queue.pop(0)
 
 	if (x, y) == destination:
-		print('fewest steps:', moves)
-		exit(0)
+		print(moves)
+		break
 
 	if x < 0 or y < 0 or grid[x][y] != '.':
 		continue

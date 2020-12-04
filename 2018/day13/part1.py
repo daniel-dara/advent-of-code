@@ -21,7 +21,7 @@ class Cart:
 
 		# Retrieve the new track piece.
 		track = grid[self.row][self.col]
-		
+
 		# Correct orientation for curves and intersections.
 		if track == '\\' and self.orientation in '<>' or track == '/' and self.orientation in '^v':
 			self.turnRight()
@@ -52,10 +52,14 @@ for row in range(len(grid)):
 			# Remove carts from the grid so they don't mess up traversal code.
 			grid[row][col] = '-' if grid[row][col] in '<>' else '|'
 
-while True:
-	for cart in carts:
-		cart.move()
 
-		if True in list(map(cart.collidesWith, carts)):
-			print(str(cart.col) + ',' + str(cart.row))
-			exit()
+def find_collision():
+	while True:
+		for cart in carts:
+			cart.move()
+
+			if True in list(map(cart.collidesWith, carts)):
+				return cart.col, cart.row
+
+
+print(find_collision())

@@ -21,8 +21,8 @@ while molecule != 'e':
 	possible_replacements.sort(key=lambda x: len(x[0]) - len(x[1]))
 
 	if not possible_replacements:
-		print('Greedy replacement failed to find a path.', molecule, steps)
-		exit()
+		print('Greedy replacement failed to find a path.', molecule)
+		break
 	else:
 		molecule = molecule.replace(possible_replacements[0][1], possible_replacements[0][0], 1)
 		steps += 1

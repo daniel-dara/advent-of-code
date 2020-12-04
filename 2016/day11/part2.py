@@ -40,7 +40,7 @@ while True:
 		states.add(cur_hash)
 
 		if cur_hash == end_hash:
-			print("moves:", moves)
+			print(moves)
 			break
 
 		for index1 in range(len(floors[elevator])):

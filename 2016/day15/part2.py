@@ -8,10 +8,10 @@ for start_time in range(0, 10000000):
 		time += 1
 
 		if (discs[level][1] + time) % discs[level][0] != 0:
-			break;
+			break
 
 		level += 1
 
 	if level == len(discs):
-		print('start_time:', start_time)
-		exit()
+		print(start_time)
+		break

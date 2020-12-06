@@ -12,7 +12,7 @@ item_shop: Dict[str, List[Item]] = {
 	for category in open('item_shop.txt').read().split('\n\n')
 }
 player_hitpoints = 100
-boss = Character(*map(int, re.findall(r'(\d+)', open('input.txt').read())))
+boss = Character(*map(int, re.findall(r'\d+', open('input.txt').read())))
 win_costs = []
 
 

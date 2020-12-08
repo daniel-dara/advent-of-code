@@ -1,6 +1,6 @@
 from typing import Union
 
-program = [(line.split()[0], int(line.split()[1])) for line in open('input.txt')]
+program = [(command, int(number)) for command, number in map(str.split, open('input.txt'))]
 
 
 def resolve_program() -> Union[None, int]:

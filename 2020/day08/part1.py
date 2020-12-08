@@ -1,4 +1,4 @@
-program = tuple((line.split()[0], int(line.split()[1])) for line in open('input.txt'))
+program = tuple((command, int(number)) for command, number in map(str.split, open('input.txt')))
 acc, index = 0, 0
 states = set()
 

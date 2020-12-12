@@ -3,7 +3,7 @@ ship = 0, 0
 waypoint = 10, 1
 
 for line in open('input.txt'):
-	action, value = line[0], int(line.strip()[1:])
+	action, value = line[0], int(line[1:])
 
 	if action in cardinals:
 		waypoint = waypoint[0] + value * cardinals[action][0], waypoint[1] + value * cardinals[action][1]

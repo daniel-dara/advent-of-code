@@ -25,7 +25,7 @@ image_matrix = numpy.array([list(row) for row in image.split('/')])
 
 # Properly split matrix: https://stackoverflow.com/a/11105569/1313439
 # transform, then put back together
-for i in range(18):
+for i in range(5):
 
 	if len(image_matrix) % 2:
 		chunk_size = 3
@@ -62,4 +62,4 @@ for i in range(18):
 	image_matrix = numpy.array(new_image)
 
 print(sum(row.tolist().count('#') for row in image_matrix))
-print(sum(row.tolist().count('#') for row in image_matrix) == 2368161)
+print(sum(row.tolist().count('#') for row in image_matrix) == 176)

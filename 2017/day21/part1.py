@@ -18,14 +18,13 @@ for _ in range(5):
 	chunk_count = (size // chunk_size) ** 2
 	next_image = [[] for row in range(size + size // chunk_size)]
 
-	for i in range(chunk_count):
-		row, col = i * chunk_size // size * chunk_size, (i * chunk_size) % size
-		chunk = image[row:row + chunk_size, col:col + chunk_size]
-		new_chunk = rules[tuple(map(tuple, chunk))]
+	for row in range(0, size, chunk_size):
+		for col in range(0, size, chunk_size):
+			chunk = image[row:row + chunk_size, col:col + chunk_size]
+			new_chunk = rules[tuple(map(tuple, chunk))]
 
-		new_row = i * chunk_size // size * (chunk_size + 1)
-		for j, chunk_row in enumerate(new_chunk):
-			next_image[new_row + j] += chunk_row.tolist()
+			for row_index, chunk_row in enumerate(new_chunk):
+				next_image[row + row // chunk_size + row_index] += chunk_row.tolist()
 
 	image = numpy.array(next_image)
 

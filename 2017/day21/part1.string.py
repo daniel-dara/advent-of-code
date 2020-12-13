@@ -3,8 +3,10 @@
 import math
 import numpy
 
-rules = {a: b for a, b in (line.strip().split(' => ') for line in open('input.txt'))}
+rules = {a: b.replace('/', '') for a, b in (line.strip().split(' => ') for line in open('input.txt'))}
 image = '.#...####'
+# image = '#..#........#..#'
+# image = '##.##.#..#........##.##.#..#........'
 
 flipped_rules = {}
 
@@ -12,9 +14,9 @@ for input_, output in rules.items():
 	for k in range(4):
 		array = [list(row) for row in input_.split('/')]
 		array = numpy.rot90(array, k)
-		str_array = '/'.join(''.join(row) for row in array)
+		str_array = ''.join(''.join(row) for row in array)
 		# print(str_array.replace('/', '\n'), '\n')
-		flipped_str = '/'.join(''.join(row[::-1]) for row in array)
+		flipped_str = ''.join(''.join(row[::-1]) for row in array)
 		# print(flipped_str.replace('/', '\n'), '\n')
 
 		flipped_rules[str_array] = output
@@ -22,54 +24,29 @@ for input_, output in rules.items():
 
 rules = flipped_rules
 
-# Properly split matrix: https://stackoverflow.com/a/11105569/1313439
-# transform, then put back together
-for i in range(5):
-	image = '#..#........#..#'
+for _ in range(5):
 	size = int(math.sqrt(len(image)))
-
-	square_size = 3 if size % 2 else 2
-	squares = [''] * (size // square_size) ** 2
+	chunk_size = 3 if size % 2 else 2
+	chunks = [''] * (size // chunk_size) ** 2
+	chunks_per_side = size // chunk_size
 
 	for index, char in enumerate(image):
-		row, col = index // size, index % size
+		chunk_index = index // (size * chunk_size) * chunks_per_side + index // chunk_size % chunks_per_side
+		chunks[chunk_index] += char
 
-		row_limit == index // (size * square_size) +
-		# loc = i // (size // chunk_size), (i * chunk_size) % size
-		# square_index = (index // square_size) % len(squares)
+	print(chunks)
 
-		squares[square_index] += char
+	for i in range(len(chunks)):
+		chunks[i] = rules[chunks[i]]
 
-	print(squares)
-	continue
-	# print(x)
-	# print('\n\n'.join(pattern.replace('/', '\n') for pattern in image))
-
-	for pattern in image:
-		output = rules[pattern]
-
-
-
-		if output.count('/') == 3:
-			# convert 4x4 to 2x2
-			rows = output.split('/')
-			new_image.append(rows[0][:2] + '/' + rows[1][:2])
-			new_image.append(rows[0][2:] + '/' + rows[1][2:])
-			new_image.append(rows[2][:2] + '/' + rows[3][:2])
-			new_image.append(rows[2][2:] + '/' + rows[3][2:])
-
-
-			new_matrix = [
-				rows[0][:2] + '/' + rows[1][:2],
-				rows[0][2:] + '/' + rows[1][2:],
-				rows[2][:2] + '/' + rows[3][:2],
-				rows[2][2:] + '/' + rows[3][2:],
-			]
-		else:
-			new_image.append(output)
+	new_image = ''
+	new_size = size + chunks_per_side
+	new_chunk_size = chunk_size + 1
+	for index in range(new_size ** 2):
+		chunk_index = index // (new_size * new_chunk_size) * chunks_per_side + index // new_chunk_size % chunks_per_side
+		new_image += chunks[chunk_index][(index % (new_chunk_size ** 2 * chunks_per_side)) // new_size * new_chunk_size + 0 + index % new_chunk_size]
+		# new_image += chunks[chunk_index][(index // new_size * new_chunk_size + index % new_chunk_size) % (new_chunk_size ** 2 * chunks_per_side)]
 
 	image = new_image
 
-print(sum(pattern.count('#') for pattern in image))
-
-# 136 too low
+print(image.count('#'))

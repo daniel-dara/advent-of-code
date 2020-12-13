@@ -1,0 +1,37 @@
+# b = 67
+# b *= 100
+# b += 100,000
+# c = b
+# c += 17,000
+
+b = 106,700
+c = 123,700
+
+# count of all non-primes (composite numbers) from [106700, 123700] step 17
+while True:
+    f = 1
+    d = 2 # lowest prime factor
+
+    do: # f = (1 if b is prime else 0)
+        e = 2
+
+        do:
+            if d * e == b
+                f = 0
+
+            e += 1
+        while e != b:
+
+        d += 1
+    while d != b:
+
+    if f == 0:
+        h += 1
+
+    if b == c:
+        break
+
+    b += 17
+
+end program
+

@@ -1,0 +1,36 @@
+b = 67
+c = b
+b *= 100
+b += 100000
+c = b
+c += 17000
+# b = 106700, c = 123700
+
+B:
+f = 1
+d = 2
+
+E:
+e = 2
+
+D:
+if d * e != b goto C
+f = 0
+
+C:
+e += 1
+if e != b goto D
+d += 1
+if d != b goto E
+if f != 0 goto F
+h += 1
+
+F:
+g = b
+g -= c
+if g != 0 goto G
+END PROGRAM
+
+G:
+b += 17
+goto B

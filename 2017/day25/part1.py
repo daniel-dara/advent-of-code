@@ -14,13 +14,12 @@ with open('input.txt') as file:
 		blueprint[group[0], int(group[1])] = int(group[2]), -1 if group[3] == 'left' else 1, group[4]
 		blueprint[group[0], int(group[5])] = int(group[6]), -1 if group[7] == 'left' else 1, group[8]
 
-tape = defaultdict(lambda: 0)
+tape = defaultdict(int)
 index = 0
 
-while steps:
+for _ in range(steps):
 	value, move, state = blueprint[state, tape[index]]
 	tape[index] = value
 	index += move
-	steps -= 1
 
 print(sum(tape.values()))

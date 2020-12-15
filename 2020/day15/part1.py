@@ -1,16 +1,8 @@
 
-nums = [0, 3, 6]
-nums = [10,16,6,0,1,17]
+history = {value: i + 1 for i, value in enumerate(map(int, open('input.txt').readline().split(',')))}
+previous = list(history)[-1]
 
-for _ in range(2020 - len(nums)):
-	if nums[-1] not in nums[:-1]:
-		nums.append(0)
-	else:
-		last_seen = len(nums) - 1 - nums[::-1].index(nums[-1])
-		second_last_seen = len(nums[:last_seen]) - 1 - nums[:last_seen][::-1].index(nums[-1])
-		nums.append(last_seen - second_last_seen)
+for turn in range(len(history), 2020):
+	history[previous], previous = turn, turn - history.get(previous, turn)
 
-	print(nums[-1])
-
-print(nums[-1])
-print(len(nums))
+print(previous)

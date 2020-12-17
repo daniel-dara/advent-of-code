@@ -1,130 +1,40 @@
+import operator
 import re
-from itertools import zip_longest
+from copy import deepcopy
+from typing import List
 
-# https://docs.python.org/3/library/itertools.html
-def grouper(iterable, n, fillvalue=None):
-    "Collect data into fixed-length chunks or blocks"
-    # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"
-    args = [iter(iterable)] * n
-    return zip_longest(*args, fillvalue=fillvalue)
+opnames = (
+	'addr', 'addi', 'mulr', 'muli', 'banr', 'bani', 'borr', 'bori',
+	'setr', 'seti', 'gtir', 'gtri', 'gtrr', 'eqir', 'eqri', 'eqrr'
+)
 
-class Sample:
-	def __init__(self, opcode, a, b, c, before, after):
-		self.opcode = opcode
-		self.a = a
-		self.b = b
-		self.c = c
-		self.before = before
-		self.after = after
+opmap = {
+	'ad': operator.add,
+	'mu': operator.mul,
+	'ba': operator.and_,
+	'bo': operator.or_,
+	'se': lambda a, _: a,
+	'gt': operator.gt,
+	'eq': operator.eq,
+}
 
-	def __repr__(self):
-		return 'Sample' + str((self.before, (self.opcode, self.a, self.b, self.c), self.after))
 
-def addr(registers, a, b, c):
-	registers[c] = registers[a] + registers[b]
-	return registers
+def execute(regs: List[int], opname: str, a: int, b: int, c: int) -> List[int]:
+	a = a if opname[2] == 'i' or opname == 'seti' else regs[a]
+	b = b if opname[3] == 'i' else regs[b]
+	regs[c] = int(opmap[opname[:2]](a, b))
+	return regs
 
-def addi(registers, a, b, c):
-	registers[c] = registers[a] + b
-	return registers
 
-def mulr(registers, a, b, c):
-	registers[c] = registers[a] * registers[b]
-	return registers
-
-def muli(registers, a, b, c):
-	registers[c] = registers[a] * b
-	return registers
-
-def banr(registers, a, b, c):
-	registers[c] = registers[a] & registers[b]
-	return registers
-
-def bani(registers, a, b, c):
-	registers[c] = registers[a] & b
-	return registers
-
-def borr(registers, a, b, c):
-	registers[c] = registers[a] | registers[b]
-	return registers
-
-def bori(registers, a, b, c):
-	registers[c] = registers[a] | b
-	return registers
-
-def setr(registers, a, b, c):
-	registers[c] = registers[a]
-	return registers
-
-def seti(registers, a, b, c):
-	registers[c] = a
-	return registers
-
-def gtir(registers, a, b, c):
-	registers[c] = int(a > registers[b])
-	return registers
-
-def gtri(registers, a, b, c):
-	registers[c] = int(registers[a] > b)
-	return registers
-
-def gtrr(registers, a, b, c):
-	registers[c] = int(registers[a] > registers[b])
-	return registers
-
-def eqir(registers, a, b, c):
-	registers[c] = int(a == registers[b])
-	return registers
-
-def eqri(registers, a, b, c):
-	registers[c] = int(registers[a] == b)
-	return registers
-
-def eqrr(registers, a, b, c):
-	registers[c] = int(registers[a] == registers[b])
-	return registers
-
+numbers = list(map(int, re.findall(r'\d+', open('input.txt').read().split('\n\n\n')[0])))
 samples = []
 
-for lineGroup in grouper(map(str.strip, open('input.txt').readlines()), 4):
-	if lineGroup[0] == '':
-		break
+for i in range(0, len(numbers), 12):
+	regs_in = numbers[i:i + 4]
+	opcode, A, B, C = numbers[i + 4:i + 8]
+	regs_out = numbers[i + 8:i + 12]
 
-	ints = map(int, re.findall(r'(\d+)', ''.join(lineGroup)))
-	before, instruction, after = map(list, grouper(ints, 4))
-	opcode, a, b, c = instruction
+	possible_opnames = [opname for opname in opnames if execute(deepcopy(regs_in), opname, A, B, C) == regs_out]
+	samples.append(possible_opnames)
 
-	samples.append(Sample(opcode, a, b, c, before, after))
-
-ops = [
-	addr,
-	addi,
-	mulr,
-	muli,
-	banr,
-	bani,
-	borr,
-	bori,
-	setr,
-	seti,
-	gtir,
-	gtri,
-	gtrr,
-	eqir,
-	eqri,
-	eqrr,
-]
-
-total = 0
-
-for sample in samples:
-	possibilities = 0
-
-	for op in ops:
-		if sample.after == op(sample.before.copy(), sample.a, sample.b, sample.c):
-			possibilities += 1
-
-	if possibilities >= 3:
-		total += 1
-
-print(total)
+print(sum(1 for sample in samples if len(sample) >= 3))

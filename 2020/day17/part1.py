@@ -1,27 +1,26 @@
 import itertools
+import operator
 
-active_cubes = set()
-
-for y, line in enumerate(open('input.txt').readlines()):
-	for x, char in enumerate(line.strip()):
-		if char == '#':
-			active_cubes.add((x, y, 0))
+active_cubes = set(
+	(x, y, 0)
+	for y, line in enumerate(open('input.txt').readlines())
+	for x, char in enumerate(line.strip())
+	if char == '#'
+)
 
 for _ in range(6):
 	next_state = set()
+	mins = [min(active_cubes, key=operator.itemgetter(i))[i] - 1 for i in range(3)]
+	maxs = [max(active_cubes, key=operator.itemgetter(i))[i] + 1 for i in range(3)]
 
-	min_x, max_x = min(active_cubes, key=lambda p: p[0])[0] - 1, max(active_cubes, key=lambda p:p[0])[0] + 1
-	min_y, max_y = min(active_cubes, key=lambda p: p[1])[1] - 1, max(active_cubes, key=lambda p:p[1])[1] + 1
-	min_z, max_z = min(active_cubes, key=lambda p: p[2])[2] - 1, max(active_cubes, key=lambda p:p[2])[2] + 1
-
-	for x in range(min_x, max_x + 1):
-		for y in range(min_y, max_y + 1):
-			for z in range(min_z, max_z + 1):
-				active_neighbors = 0
-
-				for dx, dy, dz in itertools.product([-1, 0, 1], repeat=3):
-					if dx != 0 or dy != 0 or dz != 0:
-						active_neighbors += int((x + dx, y + dy, z + dz) in active_cubes)
+	for x in range(mins[0], maxs[0] + 1):
+		for y in range(mins[1], maxs[1] + 1):
+			for z in range(mins[2], maxs[2] + 1):
+				active_neighbors = sum(
+					int((x + dx, y + dy, z + dz) in active_cubes)
+					for dx, dy, dz in itertools.product([-1, 0, 1], repeat=3)
+					if (dx != 0 or dy != 0 or dz != 0)
+				)
 
 				if (
 					(x, y, z) in active_cubes and 2 <= active_neighbors <= 3

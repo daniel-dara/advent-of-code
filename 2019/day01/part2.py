@@ -20,4 +20,4 @@ def calculate3(fuel):
 	for fuel in iter(lambda: max(0, (fuel // 3) - 2), 0):
 		yield fuel
 
-print(sum([sum(calculate1(int(mass))) for mass in open('input.txt').readlines()]))
+print(sum([sum(calculate1(int(mass))) for mass in open('input.txt')]))

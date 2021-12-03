@@ -1,2 +1,1 @@
-A=sum(({'f':1j,'d':1,'u':-1}[A[0]]*int(A[-2])for A in open('input.txt')))
-print(A.real*A.imag)
+print((sum(dict(f=1j,d=1,u=-1)[l[0]]*int(l[-2])for l in open('i'))**2).imag/2)

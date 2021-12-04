@@ -1,45 +1,46 @@
+from typing import List
 from more_itertools import chunked
 
-SIDE_LENGTH = 5
-input_file = 'example.txt'
-# input_file = 'input.txt'
 
-pool = map(int, open(input_file).readlines()[0].split(','))
+class ListTools:
+	@staticmethod
+	def replace(list_: List, old, new_) -> List:
+		return [new_ if old == value else value for value in list_]
+
+	@staticmethod
+	def remove(list_: List, target) -> List:
+		return [value for value in list_ if value != target]
 
 
 def is_bingo(board):
-	for chunk in chunked(board, SIDE_LENGTH):
-		if chunk.count(None) == SIDE_LENGTH:
-			return True
+	has_bingo_row = any(
+		row.count(None) == len(row)
+		for row in chunked(board, SIDE_LENGTH)
+	)
 
-	for i in range(SIDE_LENGTH):
-		if [num for num in board[i::SIDE_LENGTH]].count(None) == SIDE_LENGTH:
-			return True
+	has_bingo_column = any(
+		all(num is None for num in board[i::SIDE_LENGTH])
+		for i in range(SIDE_LENGTH)
+	)
 
-	return False
+	return has_bingo_row or has_bingo_column
 
 
-board_data = (
-	map(int, open(input_file).read().split()[1:])
+SIDE_LENGTH = 5
+input_file = 'input.txt'
+
+pool = map(int, open(input_file).readlines()[0].split(','))
+
+boards = chunked(
+	map(int, open(input_file).read().split()[1:]),
+	SIDE_LENGTH ** 2
 )
 
-boards = list(chunked(board_data, SIDE_LENGTH ** 2))
-
 for number in pool:
-	j = 0
-	while j < len(boards):
-		board = boards[j]
+	boards = [ListTools.replace(board, number, None) for board in boards]
 
-		for i in range(len(board)):
-			if board[i] == number:
-				board[i] = None
+	if len(boards) == 1 and is_bingo(boards[0]):
+		print(sum(ListTools.remove(boards[0], None)) * number)
+		exit()
 
-		if is_bingo(board):
-			if len(boards) > 1:
-				boards.pop(j)
-				j -= 1
-			else:
-				print(sum(filter(lambda x: x is not None, board)) * number)
-				exit()
-
-		j += 1
+	boards = filter(lambda board: not is_bingo(board), boards)

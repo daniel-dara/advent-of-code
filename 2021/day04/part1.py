@@ -31,10 +31,10 @@ input_file = 'input.txt'
 
 pool = map(int, open(input_file).readlines()[0].split(','))
 
-boards = list(chunked(
+boards = chunked(
 	map(int, open(input_file).read().split()[1:]),
 	SIDE_LENGTH ** 2
-))
+)
 
 for number in pool:
 	boards = [ListTools.replace(board, number, None) for board in boards]

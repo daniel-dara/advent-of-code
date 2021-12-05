@@ -7,8 +7,8 @@ def get_range(a1: int, a2: int, b1: int, b2: int) -> Iterable:
 	if a1 == a2:
 		a_range = (abs(b2 - b1) + 1) * [a1]
 	else:
-		a_step = 1 if a2 > a1 else -1
-		a_range = range(a1, a2 + a_step, a_step)
+		a1, a2 = sorted((a1, a2))
+		a_range = range(a1, a2 + 1)
 
 	return a_range
 

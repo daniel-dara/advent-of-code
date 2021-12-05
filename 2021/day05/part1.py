@@ -1,17 +1,5 @@
 import re
 from collections import defaultdict
-from typing import Iterable
-
-
-def get_range(a1: int, a2: int, b1: int, b2: int) -> Iterable:
-	if a1 == a2:
-		a_range = (abs(b2 - b1) + 1) * [a1]
-	else:
-		a1, a2 = sorted((a1, a2))
-		a_range = range(a1, a2 + 1)
-
-	return a_range
-
 
 graph = defaultdict(int)
 
@@ -19,7 +7,11 @@ for line in open('input.txt'):
 	x1, y1, x2, y2 = map(int, re.findall(r'\d+', line))
 
 	if x1 == x2 or y1 == y2:
-		for a, b in zip(get_range(x1, x2, y1, y2), get_range(y1, y2, x1, x2)):
-			graph[(a, b)] += 1
+		graph[x1, y1] += 1
 
-print(sum(value >= 2 for value in graph.values()))
+		while (x1, y1) != (x2, y2):
+			x1 += (x2 > x1) - (x1 > x2)
+			y1 += (y2 > y1) - (y1 > y2)
+			graph[x1, y1] += 1
+
+print(sum(value > 1 for value in graph.values()))

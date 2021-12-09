@@ -1,0 +1,32 @@
+set b 67
+set c b
+jnz a A
+jnz 1 B
+A: mul b 100
+sub b -100000
+set c b
+sub c -17000
+B: set f 1
+set d 2
+E: set e 2
+D: set g d
+mul g e
+sub g b
+jnz g C
+set f 0
+C: sub e -1
+set g e
+sub g b
+jnz g D
+sub d -1
+set g d
+sub g b
+jnz g E
+jnz f F
+sub h -1
+F: set g b
+sub g c
+jnz g G
+jnz 1 END
+G: sub b -17
+jnz 1 B

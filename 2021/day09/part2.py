@@ -11,8 +11,7 @@ def get_basin(row_: int, col_: int, visited: Set[Tuple[int, int]] = None) -> Set
 	visited.add((row_, col_))
 
 	for row2, col2 in ((row_ - 1, col_), (row_ + 1, col_), (row_, col_ - 1), (row_, col_ + 1)):
-		if (row2, col2) not in grid or grid[row2, col2] > grid[row_, col_]:
-			visited |= get_basin(row2, col2, visited)
+		visited |= get_basin(row2, col2, visited)
 
 	return visited
 

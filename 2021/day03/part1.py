@@ -3,6 +3,6 @@ from math import prod
 
 numbers = open('input.txt').read().split()
 columns = zip(*numbers)
-hi_lo_digits = [next(zip(*Counter(row).most_common())) for row in columns]
-bit_array = list(zip(*hi_lo_digits))
-print(prod(int(''.join(bits), 2) for bits in bit_array))
+hi_lo_paired_digits = [next(zip(*Counter(row).most_common())) for row in columns]
+hi_lo_bit_arrays = list(zip(*hi_lo_paired_digits))
+print(prod(int(''.join(bit_array), 2) for bit_array in hi_lo_bit_arrays))

@@ -1,8 +1,6 @@
 
 def get_seat_id(boarding_pass: str) -> int:
-	row = int(boarding_pass[:7].replace('F', '0').replace('B', '1'), 2)
-	column = int(boarding_pass[7:10].replace('L', '0').replace('R', '1'), 2)
-	return row * 8 + column
+	return int(boarding_pass.replace('F', '0').replace('L', '0').replace('B', '1').replace('R', '1'), 2)
 
 
 ids = sorted(get_seat_id(line) for line in open('input.txt'))

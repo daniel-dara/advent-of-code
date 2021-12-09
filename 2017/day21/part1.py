@@ -1,16 +1,15 @@
-# TODO: Cleanup this disgusting code
 import numpy
 
-rules = {}
+enhancements = {}
 
 for line in open('input.txt'):
-	input_, output = (numpy.array([list(row) for row in pattern.split('/')]) for pattern in line.strip().split(' => '))
+	input_, output = (tuple(map(tuple, pattern.split('/'))) for pattern in line.strip().split(' => '))
 
 	for k in range(4):
-		rules[tuple(map(tuple, numpy.rot90(input_, k)))] = output
-		rules[tuple(map(tuple, numpy.rot90(numpy.flip(input_, 0), k)))] = output
+		enhancements[tuple(map(tuple, numpy.rot90(input_, k)))] = output
+		enhancements[tuple(map(tuple, numpy.rot90(numpy.flip(input_, 0), k)))] = output
 
-image = numpy.array([list(row) for row in '.#./..#/###'.split('/')])
+image = numpy.array(tuple(map(tuple, '.#./..#/###'.split('/'))))
 
 for _ in range(5):
 	size = len(image)
@@ -21,12 +20,11 @@ for _ in range(5):
 	for row in range(0, size, chunk_size):
 		for col in range(0, size, chunk_size):
 			chunk = image[row:row + chunk_size, col:col + chunk_size]
-			new_chunk = rules[tuple(map(tuple, chunk))]
+			new_chunk = enhancements[tuple(map(tuple, chunk))]
 
 			for row_index, chunk_row in enumerate(new_chunk):
-				next_image[row + row // chunk_size + row_index] += chunk_row.tolist()
+				next_image[row + row // chunk_size + row_index] += chunk_row
 
 	image = numpy.array(next_image)
 
 print(sum(row.tolist().count('#') for row in image))
-print(sum(row.tolist().count('#') for row in image) == 176)

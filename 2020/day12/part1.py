@@ -4,7 +4,7 @@ location = 0, 0
 direction = 0
 
 for line in open('input.txt'):
-	action, value = line[0], int(line.strip()[1:])
+	action, value = line[0], int(line[1:])
 
 	if action in cardinals or action == 'F':
 		change = cardinals[action] if action in cardinals else directions[direction]

@@ -6,8 +6,8 @@ direction = 0
 for line in open('input.txt'):
 	action, value = line[0], int(line[1:])
 
-	if action in cardinals or action == 'F':
-		change = cardinals[action] if action in cardinals else directions[direction]
+	if action == 'F' or action in cardinals:
+		change = directions[direction] if action == 'F' else cardinals[action]
 		location = location[0] + value * change[0], location[1] + value * change[1]
 	else:
 		direction = (direction + (value if action == 'R' else -value) // 90) % len(directions)

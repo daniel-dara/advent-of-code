@@ -26,7 +26,7 @@ createDirectory(year)
 dayPath = year + '/day' + day
 createDirectory(dayPath)
 
-for file in ['part1.py', 'part2.py', 'input.txt', 'example.txt']:
+for file in ['part1.py', 'part2.wip.py', 'input.txt', 'example.txt']:
 	fullFilePath = dayPath + '/' + file
 
 	if not os.path.exists(fullFilePath):

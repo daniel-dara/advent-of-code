@@ -40,8 +40,8 @@ while full_bots:
 	giver, type1, taker1, type2, taker2 = [int(x) if x.isdigit() else x for x in bots[full_bots[-1]]['instruction']]
 
 	if sorted(bots[giver]['chips']) == find_comparison:
-		print('comparing bot:', giver)
-		exit()
+		print(giver)
+		break
 
 	if type1 == 'bot':
 		bots[taker1]['chips'].append(min(bots[giver]['chips']))

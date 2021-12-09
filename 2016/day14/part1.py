@@ -1,32 +1,36 @@
 from hashlib import md5
 import re
 
-index  = 0
-keys   = []
-hashes = []
 
-def generateHash(num):
+def generate_hash(num):
 	md5hash = md5(bytes('yjdafjpo' + str(num), 'ascii')).hexdigest()
 	quintuples = re.findall(r'(\d|\w)\1\1\1\1', md5hash)
 
-	hashes.append((md5hash, quintuples))
+	return md5hash, quintuples
 
-for i in range(1000):
-	generateHash(i)
 
-while len(keys) < 64:
-	cur_hash = hashes.pop(0)[0]
-	generateHash(index + 1000)
+def find_64th_key(hashes):
+	index = 0
+	keys = 0
 
-	match = re.search(r'(\d|\w)\1\1', cur_hash)
+	while keys < 64:
+		cur_hash = hashes.pop(0)[0]
+		hashes.append(generate_hash(index + 1000))
 
-	if match:
-		letter = match.groups()[0]
+		match = re.search(r'(\d|\w)\1\1', cur_hash)
 
-		for item in hashes:
-			if letter in item[1]:
-				keys.append((letter, index))
-				print('found key', len(keys), 'at index', index)
-				break
+		if match:
+			letter = match.groups()[0]
 
-	index += 1
+			for item in hashes:
+				if letter in item[1]:
+					keys += 1
+					break
+
+		index += 1
+
+	return index - 1
+
+
+hashes = [generate_hash(i) for i in range(1000)]
+print(find_64th_key(hashes))

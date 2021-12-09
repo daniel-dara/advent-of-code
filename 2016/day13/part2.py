@@ -24,4 +24,4 @@ while len(queue) > 0:
 	for dx, dy in [(-1, 0), (0, -1), (1, 0), (0, 1)]:
 		queue.append((x + dx, y + dy, moves + 1))
 
-print('unique states reached:', states)
+print(states)

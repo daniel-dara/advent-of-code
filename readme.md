@@ -4,6 +4,7 @@ My solutions to [advent of code](https://adventofcode.com/about).
 
 Year | Progress / 50
 -----|-----
+2021 | 17
 2020 | 28
 2019 | 4
 2018 | 29

@@ -1,27 +1,30 @@
 from collections import defaultdict
 
-rules = defaultdict(lambda: [])
-revRules = {}
-molecule = open('input/problem.txt').readlines()[-1]
-possibilities = set()
-maxLength = 0
+molecule = open('input.txt').readlines()[-1]
+replacements = defaultdict(lambda: [])
 
-for line in open('input/problem.txt'):
-	if line == '\n':
-		break
+for line in open('input.txt'):
+	if ' => ' in line:
+		from_, to = line.rstrip().split(' => ')
+		replacements[from_] += [to]
 
-	a, b = line.rstrip().split(' => ')
-	rules[b] = [a]
-	revRules[b] = a
-	maxLength = max(maxLength, len(b))
+steps = 0
 
+while molecule != 'e':
+	possible_replacements = []
 
+	for from_, to_list in replacements.items():
+		for to in to_list:
+			if to in molecule:
+				possible_replacements.append((from_, to))
 
-while molecule not in rules['e']:
-	for i in range(len(molecule)):
-		for j in range(1, maxLength + 1):
+	possible_replacements.sort(key=lambda x: len(x[0]) - len(x[1]))
 
-			for replacement in revRules[molecule[i:i + j]]:
-				possibilities.add(molecule[:i] + replacement + molecule[i + j:])
+	if not possible_replacements:
+		print('Greedy replacement failed to find a path.', molecule, steps)
+		exit()
+	else:
+		molecule = molecule.replace(possible_replacements[0][1], possible_replacements[0][0], 1)
+		steps += 1
 
-print(len(possibilities))
+print(steps)

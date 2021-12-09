@@ -1,13 +1,13 @@
 from collections import defaultdict
 
+molecule = open('input.txt').readlines()[-1]
 replacements = defaultdict(lambda: [])
 
-for line in open('input/problem.txt'):
+for line in open('input.txt'):
 	if ' => ' in line:
 		from_, to = line.rstrip().split(' => ')
 		replacements[from_] += [to]
 
-molecule = open('input/problem.txt').readlines()[-1]
 new_molecules = set()
 max_length = max(map(len, replacements))
 

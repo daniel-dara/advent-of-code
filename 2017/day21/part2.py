@@ -1,65 +1,30 @@
-# TODO: Cleanup this disgusting solution
-
 import numpy
-rules = {a: b for a, b in (line.strip().split(' => ') for line in open('input.txt'))}
-image = '.#./..#/###'
-# image = '#..#/..../..../#..#'
-# image = '##.##./#..#../....../##.##./#..#../......'
 
-flipped_rules = {}
+enhancements = {}
 
-for input_, output in rules.items():
+for line in open('input.txt'):
+	input_, output = (tuple(map(tuple, pattern.split('/'))) for pattern in line.strip().split(' => '))
+
 	for k in range(4):
-		array = [list(row) for row in input_.split('/')]
-		array = numpy.rot90(array, k)
-		str_array = '/'.join(''.join(row) for row in array)
-		# print(str_array.replace('/', '\n'), '\n')
-		flipped_str = '/'.join(''.join(row[::-1]) for row in array)
-		# print(flipped_str.replace('/', '\n'), '\n')
+		enhancements[tuple(map(tuple, numpy.rot90(input_, k)))] = output
+		enhancements[tuple(map(tuple, numpy.rot90(numpy.flip(input_, 0), k)))] = output
 
-		flipped_rules[str_array] = output
-		flipped_rules[flipped_str] = output
+image = numpy.array(tuple(map(tuple, '.#./..#/###'.split('/'))))
 
-rules = flipped_rules
-image_matrix = numpy.array([list(row) for row in image.split('/')])
-
-# Properly split matrix: https://stackoverflow.com/a/11105569/1313439
-# transform, then put back together
-for i in range(18):
-
-	if len(image_matrix) % 2:
-		chunk_size = 3
-	else:
-		chunk_size = 2
-
-	size = len(image_matrix)
+for _ in range(18):
+	size = len(image)
+	chunk_size = 3 if len(image) % 2 else 2
 	chunk_count = (size // chunk_size) ** 2
-	matrices = []
+	next_image = [[] for row in range(size + size // chunk_size)]
 
-	for i in range(chunk_count):
-		loc = i // (size // chunk_size) * chunk_size, (i * chunk_size) % size
-		matrices.append(image_matrix[loc[0]:loc[0] + chunk_size, loc[1]:loc[1] + chunk_size])
+	for row in range(0, size, chunk_size):
+		for col in range(0, size, chunk_size):
+			chunk = image[row:row + chunk_size, col:col + chunk_size]
+			new_chunk = enhancements[tuple(map(tuple, chunk))]
 
-	# [print(matrix) for matrix in matrices]
+			for row_index, chunk_row in enumerate(new_chunk):
+				next_image[row + row // chunk_size + row_index] += chunk_row
 
-	for i in range(len(matrices)):
-		string = '/'.join(''.join(row) for row in matrices[i])
-		new_string = rules[string]
-		new_matrix = [list(row) for row in new_string.split('/')]
-		matrices[i] = new_matrix
+	image = numpy.array(next_image)
 
-	# [print(matrix) for matrix in matrices]
-	# image = '/'.join(''.join(row) for row in matrices[0])
-	# print(image)
-
-	new_image = [[] for row in range(size + size // chunk_size)]
-	main_row = 0
-	for i in range(chunk_count):
-		main_row = i // (size // chunk_size) * (chunk_size + 1)
-		for j, row in enumerate(matrices[i]):
-			new_image[main_row + j] += row
-
-	image_matrix = numpy.array(new_image)
-
-print(sum(row.tolist().count('#') for row in image_matrix))
-print(sum(row.tolist().count('#') for row in image_matrix) == 2368161)
+print(sum(row.tolist().count('#') for row in image))

@@ -1,6 +1,6 @@
 timers = list(map(int, open('input.txt').read().split(',')))
 
-for _ in range(256):
+for _ in range(80):
 	i = 0
 
 	while i < len(timers):

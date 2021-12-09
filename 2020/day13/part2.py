@@ -6,7 +6,7 @@ with open('input.txt') as file:
 time, step = 0, 1
 
 for offset, bus in buses:
-	while time % bus != (bus - offset) % bus:
+	while (time + offset) % bus:
 		time += step
 
 	step *= bus

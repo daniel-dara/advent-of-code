@@ -1,19 +1,16 @@
 from math import prod
-from typing import Set, Tuple
 
 
-def get_basin(row_: int, col_: int, visited: Set[Tuple[int, int]] = None) -> Set[Tuple[int, int]]:
-	visited = visited or set()
+def get_basin(row_: int, col_: int) -> int:
+	if (row_, col_) not in grid or grid[row_, col_] == 9:
+		return 0
 
-	if (row_, col_) in visited or (row_, col_) not in grid or grid[row_, col_] == 9:
-		return set()
+	grid[row_, col_] = 9
 
-	visited.add((row_, col_))
-
-	for row2, col2 in ((row_ - 1, col_), (row_ + 1, col_), (row_, col_ - 1), (row_, col_ + 1)):
-		visited |= get_basin(row2, col2, visited)
-
-	return visited
+	return 1 + sum(
+		get_basin(row2, col2)
+		for row2, col2 in ((row_ - 1, col_), (row_ + 1, col_), (row_, col_ - 1), (row_, col_ + 1))
+	)
 
 
 grid = {
@@ -25,10 +22,7 @@ grid = {
 basins = (
 	get_basin(row, col)
 	for row, col in grid
-	if all(
-		(row2, col2) not in grid or grid[row2, col2] > grid[row, col]
-		for row2, col2 in ((row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1))
-	)
+	if grid[row, col] != 9
 )
 
-print(prod(sorted(map(len, basins))[-3:]))
+print(prod(sorted(basins)[-3:]))

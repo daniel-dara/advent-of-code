@@ -32,6 +32,4 @@ basins = (
 	)
 )
 
-basins = list(basins)
 print(prod(sorted(map(len, basins))[-3:]))
-print(prod(sorted(map(len, basins))[-3:]) == 736920)

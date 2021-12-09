@@ -1,7 +1,7 @@
 import re
 
 rule_input, messages = (lines.split('\n') for lines in open('input.txt').read().split('\n\n'))
-rules = {line.split(': ')[0]: ['(?:'] + line.split(': ')[1].strip('"').split() + [')'] for line in rule_input}
+rules = {line.split(': ')[0]: ['('] + line.split(': ')[1].strip('"').split() + [')'] for line in rule_input}
 regex = ['0']
 
 while any(part in rules for part in regex):

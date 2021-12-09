@@ -1,45 +1,33 @@
 from math import prod
-
-grid = [[9] + list(map(int, list(line.strip()))) + [9] for line in open('input.txt')]
-grid = [[9] * len(grid[0])] + grid + [[9] * len(grid[0])]
-
-basins = []
+from typing import Set, Tuple
 
 
-def count_basin(row_: int, col_: int):
-	num = grid[row_][col_]
-
-	if num == 9:
+def get_basin(row_: int, col_: int) -> Set[Tuple[int, int]]:
+	if (row_, col_) not in grid or grid[row_, col_] == 9:
 		return set()
 
-	total = {(row_, col_)}
+	points = {(row_, col_)}
 
-	if num < grid[row_ - 1][col_]:
-		total |= count_basin(row_ - 1, col_)
+	for row2, col2 in ((row_ - 1, col_), (row_ + 1, col_), (row_, col_ - 1), (row_, col_ + 1)):
+		if (row2, col2) not in grid or grid[row2, col2] > grid[row_, col_]:
+			points |= get_basin(row2, col2)
 
-	if num < grid[row_ + 1][col_]:
-		total |= count_basin(row_ + 1, col_)
-
-	if num < grid[row_][col_ - 1]:
-		total |= count_basin(row_, col_ - 1)
-
-	if num < grid[row_][col_ + 1]:
-		total |= count_basin(row_, col_ + 1)
-
-	return total
+	return points
 
 
-for row in range(1, len(grid) - 1):
-	for column in range(1, len(grid[row]) - 1):
-		num = grid[row][column]
+grid = {
+	(row, col): int(char)
+	for row, line in enumerate(open('input.txt'))
+	for col, char in enumerate(line.strip())
+}
 
-		if (
-			num < grid[row - 1][column] and
-			num < grid[row + 1][column] and
-			num < grid[row][column - 1] and
-			num < grid[row][column + 1]
-		):
-			basins.append(count_basin(row, column))
+basins = (
+	get_basin(row, col)
+	for row, col in grid
+	if all(
+		(row2, col2) not in grid or grid[row2, col2] > grid[row, col]
+		for row2, col2 in ((row - 1, col), (row + 1, col), (row, col - 1), (row, col + 1))
+	)
+)
 
-# print(basins)
 print(prod(sorted(map(len, basins))[-3:]))

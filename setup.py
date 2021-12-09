@@ -1,36 +1,62 @@
 #! /usr/bin/python
+import shutil
 import sys
 import os
 import datetime
+from enum import Enum
+from typing import List
 
-def createDirectory(directory):
-	if not os.path.exists(directory):
-		os.makedirs(directory)
-		print('Created folder: ./' + directory)
 
-def normalizeDay(day):
-	return day if len(day) == 2 else '0' + day
+class Action(Enum):
+	CREATE_DIRECTORY = 0
+	CREATE_EMPTY_FILE = 1
+	COPY_CODE_FROM_TEMPLATE = 2
 
-if len(sys.argv) == 1:
-	print('Usage: setup.py [year=current] <day>')
-	exit()
-elif len(sys.argv) == 2:
-	year = str(datetime.datetime.now().year)
-	day = normalizeDay(sys.argv[1])
-else:
-	year = sys.argv[1]
-	day = normalizeDay(sys.argv[2])
 
-createDirectory(year)
+def create(path: str, action: Action) -> None:
+	if os.path.exists(path):
+		print('exists:', path)
+	else:
+		if action == Action.CREATE_DIRECTORY:
+			os.makedirs(path)
+		elif action == Action.CREATE_EMPTY_FILE:
+			open(path, 'w')
+		elif action == Action.COPY_CODE_FROM_TEMPLATE:
+			shutil.copyfile('templates/template.py', path)
+		else:
+			raise ValueError('Unsupported action: ' + action.name)
 
-dayPath = year + '/day' + day
-createDirectory(dayPath)
+		print('created:', path)
 
-for file in ['part1.py', 'part2.py', 'input.txt', 'example.txt']:
-	fullFilePath = dayPath + '/' + file
 
-	if not os.path.exists(fullFilePath):
-		open(fullFilePath, 'w').close()
-		print('Created file: ' + fullFilePath)
+def main(args: List[str]) -> int:
+	if len(args) == 1:
+		print('Usage: setup.py [year=current] <day>')
+		return 1
+	elif len(args) == 2:
+		year = str(datetime.datetime.now().year)
+		day = args[1]
+	elif len(args) == 3:
+		year = args[1]
+		day = args[2]
+	else:
+		raise ValueError(f'Too many arguments provided. Expected 1-2 but received {len(args) - 1}')
 
-print('done')
+	create(year, Action.CREATE_DIRECTORY)
+
+	problem_directory = f'{year}/day{day.zfill(2)}/'
+	create(problem_directory, Action.CREATE_DIRECTORY)
+
+	for file in 'part1', 'part2':
+		file_path = problem_directory + file + '.py'
+		create(file_path, Action.COPY_CODE_FROM_TEMPLATE)
+
+	for file in 'example', 'input':
+		file_path = problem_directory + file + '.txt'
+		create(file_path, Action.CREATE_EMPTY_FILE)
+
+	print('done!')
+	return 0
+
+
+exit(main(sys.argv))

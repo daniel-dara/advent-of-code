@@ -1,6 +1,6 @@
 tree = {}
 
-for line in open('sample.txt'):
+for line in open('input.txt'):
 	parent, children = line.rstrip().split(' <-> ')
 	tree[parent] = children.split(', ')
 

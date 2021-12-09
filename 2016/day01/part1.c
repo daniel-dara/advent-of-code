@@ -13,7 +13,7 @@ int abs(int i) {
 }
 
 int main() {
-	// Sample input.
+	// Example input.
 	//const char* directions = "R2, L3";
 	//const char* directions = "R2, R2, R2";
 	//const char* directions = "R5, L5, R5, R3";

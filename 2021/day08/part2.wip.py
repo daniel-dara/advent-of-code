@@ -30,7 +30,7 @@ digit_to_length = {key: len(value) for key, value in digit_to_letters.items()}
 length_to_digits = {value: [k for k, v in digit_to_length.items() if value == v] for value in digit_to_length.values()}
 
 total = 0
-for line in open('small_example.txt'):
+for line in open('short_example.txt'):
 	in_, out = map(str.split, line.split('|'))
 
 	# code to decoded character

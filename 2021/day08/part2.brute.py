@@ -7,7 +7,7 @@ def decode(pattern: str, mappings_: Dict[str, str]) -> str:
 	return ''.join(sorted(mappings_[letter] for letter in pattern))
 
 
-letters_to_digits = defaultdict(str, {
+letters_to_digit = defaultdict(str, {
 	'abcefg': '0',
 	'cf': '1',
 	'acdeg': '2',
@@ -29,12 +29,12 @@ for line in open('input.txt'):
 		mappings = {key: value for key, value in zip('abcdefg', configuration)}
 
 		if all(
-			letters_to_digits[decode(pattern, mappings)]
+			letters_to_digit[decode(pattern, mappings)]
 			for pattern in in_
 		):
 			total += int(
 				''.join(
-					letters_to_digits[decode(pattern, mappings)]
+					letters_to_digit[decode(pattern, mappings)]
 					for pattern in out
 				)
 			)

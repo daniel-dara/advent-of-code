@@ -26,5 +26,4 @@ for line in open('input.txt'):
 				total += points[char]
 				break
 
-print(total == 442131)
 print(total)

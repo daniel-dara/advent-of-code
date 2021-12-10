@@ -21,9 +21,8 @@ for line in open('input.txt'):
 	for char in list(line.strip()):
 		if char in close_to_open.values():
 			stack.append(char)
-		else:
-			if not stack or stack.pop() != close_to_open[char]:
-				total += points[char]
-				break
+		elif not stack or stack.pop() != close_to_open[char]:
+			total += points[char]
+			break
 
 print(total)

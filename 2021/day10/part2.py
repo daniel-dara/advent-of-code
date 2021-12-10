@@ -2,11 +2,11 @@
 
 stack = []
 
-mapping = {
-	'>': '<',
+close_to_open = {
+	')': '(',
 	']': '[',
 	'}': '{',
-	')': '(',
+	'>': '<',
 }
 
 points = {
@@ -19,18 +19,17 @@ points = {
 scores = []
 
 for line in open('input.txt'):
-	char2 = ''
-
 	stack = []
+
 	for char in list(line.strip()):
-		if char in '[({<':
+		if char in close_to_open.values():
 			stack.append(char)
 		else:
-			if len(stack) == 0 or mapping[char] != stack.pop():
-				char2 = char
+			if not stack or stack.pop() != close_to_open[char]:
+				stack = []
 				break
 
-	if char2 == '':
+	if stack:
 		subtotal = 0
 
 		while stack:
@@ -39,5 +38,5 @@ for line in open('input.txt'):
 
 		scores.append(subtotal)
 
-print(sorted(scores))
-print(sorted(scores)[len(scores)//2])
+print(sorted(scores)[len(scores) // 2] == 3646451424)
+print(sorted(scores)[len(scores) // 2])

@@ -1,7 +1,4 @@
 
-
-stack = []
-
 close_to_open = {
 	')': '(',
 	']': '[',
@@ -10,10 +7,10 @@ close_to_open = {
 }
 
 points = {
-	'<': 4,
 	'(': 1,
 	'[': 2,
 	'{': 3,
+	'<': 4,
 }
 
 scores = []
@@ -26,17 +23,15 @@ for line in open('input.txt'):
 			stack.append(char)
 		else:
 			if not stack or stack.pop() != close_to_open[char]:
-				stack = []
+				stack = None
 				break
 
 	if stack:
 		subtotal = 0
 
-		while stack:
-			subtotal *= 5
-			subtotal += points[stack.pop()]
+		for char in stack[::-1]:
+			subtotal = 5 * subtotal + points[char]
 
 		scores.append(subtotal)
 
-print(sorted(scores)[len(scores) // 2] == 3646451424)
 print(sorted(scores)[len(scores) // 2])

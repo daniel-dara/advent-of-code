@@ -1,35 +1,30 @@
 
-
-stack = []
-
-mapping = {
-	'>': '<',
+close_to_open = {
+	')': '(',
 	']': '[',
 	'}': '{',
-	')': '(',
+	'>': '<',
 }
 
 points = {
-	'>': 25137,
 	')': 3,
 	']': 57,
 	'}': 1197,
+	'>': 25137,
 }
 
 total = 0
 
 for line in open('input.txt'):
-	char2 = ''
+	stack = []
 
 	for char in list(line.strip()):
-		if char in '[({<':
+		if char in close_to_open.values():
 			stack.append(char)
 		else:
-			if len(stack) == 0 or mapping[char] != stack.pop():
-				char2 = char
+			if not stack or stack.pop() != close_to_open[char]:
+				total += points[char]
 				break
 
-	if char2 != '':
-		total += points[char2]
-
+print(total == 442131)
 print(total)

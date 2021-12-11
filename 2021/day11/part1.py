@@ -3,7 +3,7 @@ from typing import Set, Tuple
 
 
 def increment(row: int, col: int, flashed: Set[Tuple[int, int]]) -> int:
-	if (row, col) in flashed or (row, col) not in grid:
+	if (row, col) not in grid or (row, col) in flashed:
 		return 0
 
 	grid[row, col] += 1

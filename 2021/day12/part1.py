@@ -1,7 +1,5 @@
 from collections import defaultdict
-from time import time
 
-start = time()
 graph = defaultdict(list)
 
 for line in open('input.txt'):

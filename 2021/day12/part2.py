@@ -12,9 +12,8 @@ finished = 0
 
 while queue:
 	path = queue.pop(0)
-	last_node = path[-1]
 
-	for next_node in graph[last_node]:
+	for next_node in graph[path[-1]]:
 		is_repeat = next_node.islower() and next_node in path
 
 		if next_node == 'end':

@@ -23,6 +23,6 @@ while queue:
 			finished += 1
 			continue
 
-		queue.append(path + [next_node])  # 0.031247377395629883
+		queue.append(path + [next_node])
 
 print(finished)

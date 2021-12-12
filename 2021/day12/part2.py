@@ -17,12 +17,9 @@ while queue:
 	for next_node in graph[last_node]:
 		is_repeat = next_node.islower() and next_node in path
 
-		if next_node == 'start' or path[0] == '*' and is_repeat:
-			continue
 		if next_node == 'end':
 			finished += 1
-			continue
-
-		queue.append((['*'] if is_repeat else []) + path + [next_node])
+		elif next_node != 'start' and not (path[0] == '*' and is_repeat):
+			queue.append((['*'] if is_repeat else []) + path + [next_node])
 
 print(finished)

@@ -15,12 +15,9 @@ while queue:
 	last_node = path[-1]
 
 	for next_node in graph[last_node]:
-		if next_node.islower() and next_node in path:
-			continue
 		if next_node == 'end':
 			finished += 1
-			continue
-
-		queue.append(path + [next_node])
+		elif not next_node.islower() or next_node not in path:
+			queue.append(path + [next_node])
 
 print(finished)

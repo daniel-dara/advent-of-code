@@ -1,27 +1,20 @@
-import re
 
-dots = set(
-	(int(x), int(y))
-	for x, y in re.findall(r'(\d+),(\d+)', open('input.txt').read())
-)
+dots = set()
 
-instructions = [
-	(axis, int(num))
-	for axis, num in re.findall(r'(y|x)=(\d+)', open('input.txt').read())
-]
+for line in open('input.txt'):
+	if ',' in line:
+		dots.add(tuple(map(int, line.split(','))))
+	elif '=' in line:
+		axis = 'y' in line
+		value = int(line.split('=')[1])
+		folded_dots = set()
 
-folded_dots = set()
+		for dot in dots:
+			if dot[axis] < value:
+				folded_dots.add(dot)
+			else:
+				new_dot = dot[not axis], 2 * value - dot[axis]
+				folded_dots.add(new_dot if axis else new_dot[::-1])
 
-for dot in dots:
-	if instructions[0][0] == 'y':
-		if dot[1] > instructions[0][1]:
-			folded_dots.add((dot[0], instructions[0][1] - (dot[1] - instructions[0][1])))
-		else:
-			folded_dots.add(dot)
-	else:
-		if dot[0] > instructions[0][1]:
-			folded_dots.add((instructions[0][1] - (dot[0] - instructions[0][1]), dot[1]))
-		else:
-			folded_dots.add(dot)
-
-print(len(folded_dots))
+		print(len(folded_dots))
+		break

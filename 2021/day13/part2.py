@@ -13,8 +13,8 @@ for line in open('input.txt'):
 			if dot[axis] < value:
 				folded_dots.add(dot)
 			else:
-				a = dot[not axis], 2 * value - dot[axis]
-				folded_dots.add(a if axis else a[::-1])
+				new_dot = dot[not axis], 2 * value - dot[axis]
+				folded_dots.add(new_dot if axis else new_dot[::-1])
 
 		dots = folded_dots
 

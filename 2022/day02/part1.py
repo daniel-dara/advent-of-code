@@ -1,28 +1,20 @@
-import re
-import itertools
-import collections
-import math
 
-# input_file = 'example.txt'
-input_file = 'input.txt'
+# clean
+total_score = 0
+file = open('input.txt').read()
+strategy_guide = file.translate(file.maketrans('ABCXYZ', '012012'))
 
-v = 0
-l = []
+for line in strategy_guide.split('\n'):
+	a, b = map(int, line.split())
 
-a1 = 'ABC'
-b1 = 'XYZ'
+	total_score += b + 1
 
-for line in open(input_file):
-	a, b = line.strip().split(' ')
+	if a == b:
+		total_score += 3
+	elif (a + 1) % 3 == b:
+		total_score += 6
 
-	v += b1.index(b) + 1
+print(total_score)
 
-	if a1.index(a) == b1.index(b):
-		v += 3
-	elif (a1.index(a) + 1) % 3 == b1.index(b):
-		v += 6
-
-print(v)
-
-# not 14488
-# 11386
+# golf
+print(sum((i:=ord(l[0])-65,j:=ord(l[2])-88,(j-i+1)%3*3+j+1)[2]for l in open('input.txt')))

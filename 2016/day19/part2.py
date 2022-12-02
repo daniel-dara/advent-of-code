@@ -11,7 +11,6 @@ class Node:
 head = Node(0)
 current = head
 
-# todo too slow, implement left/right lists of elves
 # fill list of elves
 size = 3014387
 for i in range(1, size):
@@ -23,20 +22,22 @@ current.next = head
 head.previous = current
 current = head
 
+across = current
+
+# iterate to the elf across
+for _ in range(size // 2):
+	across = across.next
+
 # traverse loop until it's one elf
-while current.value != current.next.value:
-	original = current
-
-	# iterate to the elf across from us
-	for _ in range(size // 2):
-		current = current.next
-
+while current.value != across.value:
 	# pop the elf across (take their presents)
-	current.previous.next = current.next
-	current.next.previous = current.previous
-	size -= 1
+	across.previous.next = across.next
+	across.next.previous = across.previous
 
-	# iterate to next elf
-	current = original.next
+	# iterate the elf across
+	across = across.next
+
+	# iterate the current elf
+	current = current.next
 
 print(current.value + 1)

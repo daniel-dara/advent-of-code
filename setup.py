@@ -22,7 +22,7 @@ def create(path: str, action: Action) -> None:
 		elif action == Action.CREATE_EMPTY_FILE:
 			open(path, 'w')
 		elif action == Action.COPY_CODE_FROM_TEMPLATE:
-			shutil.copyfile('templates/template.py', path)
+			shutil.copyfile('template.py', path)
 		else:
 			raise ValueError('Unsupported action: ' + action.name)
 

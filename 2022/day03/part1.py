@@ -1,24 +1,10 @@
-import re
-import itertools
-import collections
-import math
-
-# input_file = 'example.txt'
-input_file = 'input.txt'
-
-v = 0
-l = []
-
-for line in open(input_file):
-	a, b = line[:len(line) // 2], line[len(line) // 2:]
-	a = set(list(a))
-	b = set(list(b))
-
-	letter = next(iter(a.intersection(b)))
-
-	if letter == letter.lower():
-		v += ord(letter) - ord('a') + 1
-	else:
-		v += ord(letter) - ord('A') + 27
-
-print(v)
+print(
+	sum(
+		(
+			mid := len(line) // 2,
+			letter := (set(line[:mid]) & (set(line[mid:]))).pop(),
+			ord(letter) - (ord('a') - 1 if letter.islower() else ord('A') - 27)
+		)[-1]
+		for line in open('input.txt')
+	)
+)

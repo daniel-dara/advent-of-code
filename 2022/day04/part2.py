@@ -1,19 +1,11 @@
 import re
-import itertools
-import collections
-import math
 
-# input_file = 'example.txt'
-input_file = 'input.txt'
+total = 0
 
-v = 0
-l = []
-
-for line in open(input_file):
-	a, b, c, d = map(int, re.findall('\d+', line))
+for line in open('input.txt'):
+	a, b, c, d = map(int, re.findall(r'\d+', line))
 
 	if c <= a <= d or c <= b <= d or a <= c <= b or a <= d <= b:
-		print(a, b, c, d, v)
-		v += 1
+		total += 1
 
-print(v)
+print(total)

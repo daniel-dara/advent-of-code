@@ -10,6 +10,9 @@ v = 0
 l = []
 
 for line in open(input_file):
-	re.findall(r'\d+', line)
+	a, b, c, d = map(int, re.findall('\d+', line))
+
+	if a <= c and b >= d or c <= a and d >= b:
+		v += 1
 
 print(v)

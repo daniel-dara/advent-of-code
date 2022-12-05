@@ -1,77 +1,75 @@
+from __future__ import annotations
+
 from collections import defaultdict
 from enum import Enum
 from typing import Dict, List, Tuple, DefaultDict
 
 
-class Orientation(Enum):
-	TOP = 0
-	RIGHT = 1
-	BOTTOM = 2
-	LEFT = 3
-
-
 class Tile:
-	def __init__(self, image: List[str], edge_to_orientation: Dict[str, Orientation]):
+	def __init__(self, image: List[str], string_to_side: Dict[str, Edge.Side]):
 		self.image = image
-		self.edge_to_orientation = edge_to_orientation
+		self.string_to_side = string_to_side
 
 
-class Transposition:
-	def __init__(self, tile_id: int, orientation: Orientation, edge: str, is_flipped: bool):
-		self.tile_id = tile_id
-		self.orientation = orientation
-		self.edge = edge
+class Edge:
+	class Side(Enum):
+		TOP = 0
+		RIGHT = 1
+		BOTTOM = 2
+		LEFT = 3
+
+		def __repr__(self):
+			return self.name
+
+	def __init__(self, string: str, side: Edge.Side, is_flipped: bool, tile_id: int):
+		self.string = string
+		self.side = side
 		self.is_flipped = is_flipped
+		self.tile_id = tile_id
 
 	def __repr__(self) -> str:
-		return (
-			'Transposition('
-			+ str(self.tile_id)
-			+ ', ' + str(self.orientation)
-			+ ', ' + self.edge
-			+ ', ' + str(self.is_flipped)
-			+ ')'
-		)
+		return self.__class__.__name__ + '(' + ', '.join((map(str, self.__dict__.values()))) + ')'
 
 
 def main():
-	id_to_tile: Dict[int, List[str]] = {}  # Parse from input
-	edge_to_transposition: DefaultDict[str, List[Transposition]] = defaultdict(list)  # Populate from id_to_tile
+	id_to_tile: Dict[int, List[str]] = {}
+	str_to_edge: DefaultDict[str, List[Edge]] = defaultdict(list)
 
-	for string in open('input.txt').read().strip().split('\n\n'):
-		id_, tile = int(string.strip('Tile :.#\n')), string.split('\n')[1:]
+	# Parse input into id_to_tile and str_to_edge
+	for line in open('input.txt').read().strip().split('\n\n'):
+		id_, tile = int(line.strip('Tile :.#\n')), line.split('\n')[1:]
 		id_to_tile[id_] = tile
 
-		for orientation, edge in {
-			Orientation.TOP:    tile[0],
-			Orientation.RIGHT:  ''.join(row[-1] for row in tile),
-			Orientation.BOTTOM: tile[-1],
-			Orientation.LEFT:   ''.join(row[0] for row in tile),
+		for orientation, string in {
+			Edge.Side.TOP:    tile[0],
+			Edge.Side.RIGHT: ''.join(row[-1] for row in tile),
+			Edge.Side.BOTTOM: tile[-1],
+			Edge.Side.LEFT: ''.join(row[0] for row in tile),
 		}.items():
-			edge_to_transposition[edge].append(Transposition(id_, orientation, edge, False))
-			edge_to_transposition[edge[::-1]].append(Transposition(id_, orientation, edge[::-1], True))
+			str_to_edge[string].append(Edge(string, orientation, False, id_))
+			str_to_edge[string[::-1]].append(Edge(string[::-1], orientation, True, id_))
 
-	# Iterate id_to_tile, lookup in edge_to_transposition, pop from both
 	location_to_tile: Dict[Tuple[int, int], List[str]] = {}
 
+	# For each tile in id_to_tile, lookup each edge in str_to_edge, match and place tile, then pop from both.
 	while id_to_tile:
 		id_ = next(iter(id_to_tile))
 		tile = id_to_tile.pop(id_)
 
 		print(tile)
 
-		for orientation, edge in {
-			Orientation.TOP: tile[0],
-			Orientation.RIGHT: ''.join(row[-1] for row in tile),
-			Orientation.BOTTOM: tile[-1],
-			Orientation.LEFT: ''.join(row[0] for row in tile),
+		for orientation, string in {
+			Edge.Side.TOP: tile[0],
+			Edge.Side.RIGHT: ''.join(row[-1] for row in tile),
+			Edge.Side.BOTTOM: tile[-1],
+			Edge.Side.LEFT: ''.join(row[0] for row in tile),
 		}.items():
-			if len(edge_to_transposition[edge]) > 1:
-				a, b = edge_to_transposition[edge]
+			if len(str_to_edge[string]) > 1:
+				a, b = str_to_edge[string]
 				matching_transposition = b if a.tile_id == id_ else a
-				print(orientation, edge, matching_transposition)
+				print(orientation, string, matching_transposition)
 
-			del edge_to_transposition[edge]
+			del str_to_edge[string]
 
 		exit()
 

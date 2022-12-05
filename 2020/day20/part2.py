@@ -42,9 +42,9 @@ def main():
 
 		for orientation, string in {
 			Edge.Side.TOP:    tile[0],
-			Edge.Side.RIGHT: ''.join(row[-1] for row in tile),
+			Edge.Side.RIGHT:  ''.join(row[-1] for row in tile),
 			Edge.Side.BOTTOM: tile[-1],
-			Edge.Side.LEFT: ''.join(row[0] for row in tile),
+			Edge.Side.LEFT:   ''.join(row[0] for row in tile),
 		}.items():
 			str_to_edge[string].append(Edge(string, orientation, False, id_))
 			str_to_edge[string[::-1]].append(Edge(string[::-1], orientation, True, id_))

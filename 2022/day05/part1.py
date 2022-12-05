@@ -1,16 +1,16 @@
 import re
+from collections import defaultdict
 
-STACK_COUNT = 9
-stacks = [[] for _ in range(STACK_COUNT)]
+stacks = defaultdict(list)
 
 for line in open('input.txt'):
 	if '[' in line:
-		for stack, i in zip(stacks, range(1, len(line) - 1, 4)):
+		for i in range(1, len(line) - 1, 4):
 			if line[i] != ' ':
-				stack.append(line[i])
+				stacks[(i - 1) // 4].append(line[i])
 	elif line.startswith('move'):
 		a, b, c = map(int, re.findall(r'\d+', line))
 		stacks[c - 1] = stacks[b - 1][:a][::-1] + stacks[c - 1]
 		stacks[b - 1] = stacks[b - 1][a:]
 
-print(''.join(map(next, map(iter, stacks))))
+print(''.join(stacks[i][0] for i in range(len(stacks))))

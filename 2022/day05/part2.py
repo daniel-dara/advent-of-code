@@ -1,28 +1,16 @@
 import re
-import itertools
-import collections
-import math
+from collections import defaultdict
 
-# input_file = 'example.txt'
-input_file = 'input.txt'
+stacks = defaultdict(list)
 
-v = 0
-l = []
-
-STACK_COUNT = 9
-stacks = [[] for _ in range(STACK_COUNT)]
-
-for line in open(input_file):
-	if line.strip().startswith('['):
-		for i in range(STACK_COUNT):
-			if 1 + i * 4 < len(line) and line[1 + i * 4] != ' ':
-				stacks[i].append(line[1 + i * 4])
+for line in open('input.txt'):
+	if '[' in line:
+		for i in range(1, len(line) - 1, 4):
+			if line[i] != ' ':
+				stacks[(i - 1) // 4].append(line[i])
 	elif line.startswith('move'):
 		a, b, c = map(int, re.findall(r'\d+', line))
-
 		stacks[c - 1] = stacks[b - 1][:a] + stacks[c - 1]
+		stacks[b - 1] = stacks[b - 1][a:]
 
-		for _ in range(a):
-			stacks[b - 1].pop(0)
-
-print(''.join(stacks[i][0] for i in range(STACK_COUNT) if len(stacks[i]) > 0))
+print(''.join(stacks[i][0] for i in range(len(stacks))))

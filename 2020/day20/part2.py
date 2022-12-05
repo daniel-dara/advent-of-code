@@ -4,6 +4,8 @@ from collections import defaultdict
 from enum import Enum
 from typing import Dict, List, Tuple, DefaultDict
 
+Location = Tuple[int, int]
+
 
 class Tile:
 	def __init__(self, image: List[str], string_to_side: Dict[str, Edge.Side]):
@@ -32,46 +34,59 @@ class Edge:
 
 
 def main():
-	id_to_tile: Dict[int, List[str]] = {}
-	str_to_edge: DefaultDict[str, List[Edge]] = defaultdict(list)
+	id_to_tile: Dict[int, Tile] = {}
+	string_to_edges: DefaultDict[str, List[Edge]] = defaultdict(list)
 
-	# Parse input into id_to_tile and str_to_edge
+	# Parse input into id_to_tile and string_to_edges.
 	for line in open('input.txt').read().strip().split('\n\n'):
-		id_, tile = int(line.strip('Tile :.#\n')), line.split('\n')[1:]
-		id_to_tile[id_] = tile
+		id_, image = int(line.strip('Tile :.#\n')), line.split('\n')[1:]
 
-		for orientation, string in {
-			Edge.Side.TOP:    tile[0],
-			Edge.Side.RIGHT:  ''.join(row[-1] for row in tile),
-			Edge.Side.BOTTOM: tile[-1],
-			Edge.Side.LEFT:   ''.join(row[0] for row in tile),
-		}.items():
-			str_to_edge[string].append(Edge(string, orientation, False, id_))
-			str_to_edge[string[::-1]].append(Edge(string[::-1], orientation, True, id_))
+		string_to_side = {
+			image[0]: Edge.Side.TOP,
+			''.join(row[-1] for row in image): Edge.Side.RIGHT,
+			image[-1]: Edge.Side.BOTTOM,
+			''.join(row[0] for row in image): Edge.Side.LEFT,
+		}
 
-	location_to_tile: Dict[Tuple[int, int], List[str]] = {}
+		id_to_tile[id_] = Tile(image, string_to_side)
 
-	# For each tile in id_to_tile, lookup each edge in str_to_edge, match and place tile, then pop from both.
-	while id_to_tile:
-		id_ = next(iter(id_to_tile))
+		for string, side in string_to_side.items():
+			string_to_edges[string].append(Edge(string, side, False, id_))
+			string_to_edges[string[::-1]].append(Edge(string[::-1], side, True, id_))
+
+	# Queue of (location, tile_id) to find matches for.
+	queue = [((0, 0), next(iter(id_to_tile)))]
+
+	location_to_tile: Dict[Location, Tile] = {}
+
+	while queue:
+		location, id_ = queue.pop(0)
 		tile = id_to_tile.pop(id_)
 
-		print(tile)
+		# Assign the tile to the location map.
+		location_to_tile[location] = tile
 
-		for orientation, string in {
-			Edge.Side.TOP: tile[0],
-			Edge.Side.RIGHT: ''.join(row[-1] for row in tile),
-			Edge.Side.BOTTOM: tile[-1],
-			Edge.Side.LEFT: ''.join(row[0] for row in tile),
-		}.items():
-			if len(str_to_edge[string]) > 1:
-				a, b = str_to_edge[string]
-				matching_transposition = b if a.tile_id == id_ else a
-				print(orientation, string, matching_transposition)
+		# Loop over each side of the tile.
+		for string, side in tile.string_to_side:
+			# Look for other edges that match.
+			matches = [edge for edge in string_to_edges[string] if edge.tile_id != id_]
 
-			del str_to_edge[string]
+			if matches:
+				matching_edge = matches[0]
 
-		exit()
+				# Add tile to queue
+				# todo calculate new location
+				new_location = (0, 0)
+				queue.append((new_location, matching_edge.tile_id))
+
+				# Remove the matching tile from lists
+				matching_tile = id_to_tile.pop(matching_edge.tile_id)
+
+				# todo remove all edges
+				string_to_edges[string].remove(matching_edge)
+
+				# todo rotate and flip matching_tile based on the edge, update string_to_side
+				# matching_tile.rotate().flip().orient()
 
 
 main()

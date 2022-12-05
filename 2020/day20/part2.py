@@ -68,25 +68,41 @@ def main():
 
 		# Loop over each side of the tile.
 		for string, side in tile.string_to_side:
-			# Look for other edges that match.
-			matches = [edge for edge in string_to_edges[string] if edge.tile_id != id_]
+			# Calculate match location based on which side this edge is on.
+			match_location = (
+				location[0] + (side == Edge.Side.RIGHT) - (side == Edge.Side.LEFT),
+				location[1] + (side == Edge.Side.BOTTOM) - (side == Edge.Side.TOP)
+			)
 
-			if matches:
-				matching_edge = matches[0]
+			# Check if we need a match.
+			if match_location not in location_to_tile:
+				# Look for matching edges.
+				matches = [edge for edge in string_to_edges[string] if edge.tile_id != id_]
 
-				# Add tile to queue
-				# todo calculate new location
-				new_location = (0, 0)
-				queue.append((new_location, matching_edge.tile_id))
+				# todo necessary?
+				# Remove the current tile from the edge map while we're at it.
+				# string_to_edges[string] = matches
 
-				# Remove the matching tile from lists
-				matching_tile = id_to_tile.pop(matching_edge.tile_id)
+				if matches:
+					matching_edge = matches[0]
 
-				# todo remove all edges
-				string_to_edges[string].remove(matching_edge)
+					# Add matching tile to queue.
+					queue.append((match_location, matching_edge.tile_id))
 
-				# todo rotate and flip matching_tile based on the edge, update string_to_side
-				# matching_tile.rotate().flip().orient()
+					# todo necessary?
+					# Remove the matching tile from lists.
+					# matching_tile = id_to_tile.pop(matching_edge.tile_id)
+
+					# TOP = 0
+					# RIGHT = 1
+					# BOTTOM = 2
+					# LEFT = 3
+					# todo rotate and flip matching_tile based on the edge, update string_to_side
+					# matching_tile.rotate().flip().orient()
+					id_to_tile[matching_edge.tile_id].rotate_clockwise(
+						# todo review
+						(matching_edge.side.value - (side.value + 2) % 4) % 4
+					)
 
 
 main()

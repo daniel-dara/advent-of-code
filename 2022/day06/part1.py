@@ -1,20 +1,21 @@
-import re
-import itertools
-import collections
-import math
+LENGTH = 4
+data = open('input.txt').read()
 
-# input_file = 'example.txt'
-input_file = 'input.txt'
+print(
+	next(
+		i + LENGTH
+		for i in range(len(data))
+		if len(set(data[i:i + LENGTH])) == LENGTH
+	)
+)
 
-v = 0
-l = []
-
-seen = set()
-file = open(input_file).read()
-
-for i in range(len(file)):
-	if len(set(file[i:i + 4])) == 4:
-		print(i + 4)
-		exit()
-
-print(v)
+# With zipping
+print(
+	next(
+		i + LENGTH
+		for i, group in enumerate(
+			zip(*[data[i:] for i in range(LENGTH)])
+		)
+		if len(set(group)) == LENGTH
+	)
+)

@@ -1,20 +1,10 @@
-import re
-import itertools
-import collections
-import math
+LENGTH = 14
+data = open('input.txt').read()
 
-# input_file = 'example.txt'
-input_file = 'input.txt'
-
-v = 0
-l = []
-
-seen = set()
-file = open(input_file).read()
-
-for i in range(len(file)):
-	if len(set(file[i:i + 14])) == 14:
-		print(i + 14)
-		exit()
-
-print(v)
+print(
+	next(
+		i + LENGTH
+		for i in range(len(data))
+		if len(set(data[i:i + LENGTH])) == LENGTH
+	)
+)

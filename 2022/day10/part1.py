@@ -19,4 +19,4 @@ while c <= 220:
 
 	c += 1
 
-print(t == 14520)
+print(t)

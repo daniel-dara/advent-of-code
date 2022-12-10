@@ -1,6 +1,6 @@
+f = open('input.txt')
 c = 1
 x = 1
-f = open('input.txt')
 t = 0
 v = 0
 lit = set()
@@ -20,10 +20,8 @@ while c <= 6 * 40:
 
 	c += 1
 
-p = 0
-for _ in range(6):
-	for _ in range(40):
-		print('#' if p in lit else '.', end='')
-		p += 1
+for r in range(6):
+	for c in range(40):
+		print('#' if r * 40 + c in lit else '.', end='')
 
 	print()

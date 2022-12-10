@@ -1,6 +1,6 @@
+f = open('input.txt')
 c = 1
 x = 1
-f = open('input.txt')
 t = 0
 v = 0
 
@@ -12,7 +12,7 @@ while c <= 220:
 		x += v
 		v = 0
 	else:
-		line = next(f, None)
+		line = next(f, '')
 
 		if 'addx' in line:
 			v = int(line.split()[1])

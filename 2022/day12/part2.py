@@ -10,7 +10,6 @@ starts = []
 pos_to_steps = {}
 
 for start in [k for k in height_map if height_map[k] == ord('a')]:
-	cur = None
 	queue = [(start, 0)]
 
 	while queue:

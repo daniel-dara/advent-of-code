@@ -7,7 +7,6 @@ end = [k for k in height_map if height_map[k] == ord('E')][0]
 height_map[start] = ord('a')
 height_map[end] = ord('z')
 
-cur = None
 queue = [(start, 0)]
 pos_to_steps = {}
 

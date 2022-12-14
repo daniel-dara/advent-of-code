@@ -18,9 +18,8 @@ def is_ordered(A, B):
 
 
 packets = list(map(eval, open('input.txt').read().split())) + [[[2]]] + [[[6]]]
-
 packets = sorted(packets, key=cmp_to_key(is_ordered), reverse=True)
 
 d1 = packets.index([[2]]) + 1
 d2 = packets.index([[6]]) + 1
-print(d1 * d2 == 23751)
+print(d1 * d2)

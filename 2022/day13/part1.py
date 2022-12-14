@@ -21,4 +21,4 @@ for i, pair in enumerate(open('input.txt').read().split('\n\n')):
 	a, b = map(eval, pair.split('\n'))
 	total += (i + 1) * (is_ordered(a, b) >= 0)
 
-print(total == 5185)
+print(total)

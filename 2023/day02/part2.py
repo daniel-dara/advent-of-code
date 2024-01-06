@@ -18,4 +18,4 @@ for game in open('input.txt'):
 
 	total += prod(color_to_max.values())
 
-print(total) # 3128 too low
+print(total)

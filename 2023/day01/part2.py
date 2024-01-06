@@ -14,7 +14,6 @@ word_to_digit = {
 
 total = 0
 
-# 54607 too high?
 for line in open('input.txt'):
 	line2 = ''
 	i = 0
